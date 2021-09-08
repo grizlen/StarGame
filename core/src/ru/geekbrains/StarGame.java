@@ -16,4 +16,8 @@ public class StarGame extends Game {
 	public void create () {
 		setScreen(new MenuScreen());
 	}
+
+//	Заранее извиняюсь, не могу сделать вовремя.
+//		Постараюсь в ближайшие дни здать.
+
 }
