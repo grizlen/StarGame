@@ -6,14 +6,14 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.math.Rect;
 
-public class BaseSprite extends Rect {
+public class Sprite extends Rect {
 
     protected float angle;
     protected float scale = 1;
     protected TextureRegion[] regions;
     protected int frame;
 
-    public BaseSprite(TextureRegion region) {
+    public Sprite(TextureRegion region) {
         regions = new TextureRegion[1];
         regions[0] = region;
     }
