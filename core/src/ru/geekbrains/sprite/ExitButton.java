@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.geekbrains.base.BaseButton;
-import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
 
 public class ExitButton extends BaseButton {

@@ -3,7 +3,7 @@ package ru.geekbrains.base;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public abstract class BaseButton extends Sprite{
+public abstract class BaseButton extends BaseSprite {
     private static final float PRESS_SCALE = 0.9f;
     private boolean pressed;
     private int pointer;

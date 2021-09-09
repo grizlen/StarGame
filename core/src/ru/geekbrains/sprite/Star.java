@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.base.Sprite;
+import ru.geekbrains.base.BaseSprite;
 import ru.geekbrains.math.Rect;
 
-public class Star extends Sprite {
+public class Star extends BaseSprite {
     private final Vector2 v;
     private Rect worldBounds;
 
