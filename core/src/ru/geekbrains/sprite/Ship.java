@@ -10,7 +10,7 @@ import ru.geekbrains.math.Rect;
 
 public class Ship extends BaseSprite {
 
-    private static final float SHIP_SPEED = 0.5f;
+    private static final float SHIP_SPEED = 0.1f;
 
     private Rect worldBounds;
     private Vector2 v;
@@ -52,6 +52,9 @@ public class Ship extends BaseSprite {
     }
 
     public boolean keyDown(int keycode) {
+        if (v.x != 0) {
+            return false;
+        }
         switch (keycode) {
             case Input.Keys.LEFT:
                 v.x = -SHIP_SPEED;
@@ -64,7 +67,11 @@ public class Ship extends BaseSprite {
     }
 
     public boolean keyUp(int keycode) {
-        v.x = 0;
+        if (v.x < 0 && keycode == Input.Keys.LEFT){
+            v.x = 0;
+        } else if (v.x > 0 && keycode == Input.Keys.RIGHT) {
+            v.x = 0;
+        }
         return false;
     }
 }
