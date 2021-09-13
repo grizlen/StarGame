@@ -15,6 +15,7 @@ public class MainShip extends BaseSprite {
     private static final float HEIFGH = 0.15f;
     private static final float BOOTOM_MARGIN = 0.05f;
     private static final int INVALID_POINTER = -1;
+    private static final float SHOOT_INTERVAL = 0.1f;
     private final BulletPool bulletPool;
     private final TextureRegion bulletRegion;
     private final Vector2 bulletV;
@@ -28,6 +29,8 @@ public class MainShip extends BaseSprite {
     private boolean pressedRight;
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
+    private float shootTime = 0;
+    private boolean shooting;
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
@@ -51,6 +54,14 @@ public class MainShip extends BaseSprite {
         pos.mulAdd(v, delta);
         if (!worldBounds.isMe(pos)) {
             pos.x = pos.x < worldBounds.getLeft() ? worldBounds.getLeft() : worldBounds.getRight();
+        }
+        shootTime += delta;
+        if (shootTime > SHOOT_INTERVAL) {
+            shoot();
+//            System.out.println(shootTime);
+            while (shootTime > SHOOT_INTERVAL) {
+                shootTime -= SHOOT_INTERVAL;
+            }
         }
     }
 
@@ -105,7 +116,7 @@ public class MainShip extends BaseSprite {
                 v.x = SHIP_SPEED;
                 break;
             case Input.Keys.UP:
-                shoot();
+                shooting = !shooting;
                 break;
         }
         return false;
@@ -128,8 +139,10 @@ public class MainShip extends BaseSprite {
     }
 
     private void shoot() {
-        Bullet bullet = bulletPool.obtain();
-        bulletPos.set(pos.x, pos.y + getHalfHeight());
-        bullet.set(this, bulletRegion, bulletPos, bulletV, bulletHeight, worldBounds, bulletDamage);
+        if (shooting) {
+            Bullet bullet = bulletPool.obtain();
+            bulletPos.set(pos.x, pos.y + getHalfHeight());
+            bullet.set(this, bulletRegion, bulletPos, bulletV, bulletHeight, worldBounds, bulletDamage);
+        }
     }
 }
