@@ -81,9 +81,6 @@ public class MainShip extends BaseSprite {
     }
 
     public boolean keyDown(int keycode) {
-        if (v.x != 0) {
-            return false;
-        }
         switch (keycode) {
             case Input.Keys.A:
             case Input.Keys.LEFT:
