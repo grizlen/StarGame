@@ -7,24 +7,36 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.BaseSprite;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.pool.BulletPool;
 
 public class MainShip extends BaseSprite {
 
-    private static final float SHIP_SPEED = 0.1f;
+    private static final float SHIP_SPEED = 0.5f;
     private static final float HEIFGH = 0.15f;
     private static final float BOOTOM_MARGIN = 0.05f;
     private static final int INVALID_POINTER = -1;
+    private final BulletPool bulletPool;
+    private final TextureRegion bulletRegion;
+    private final Vector2 bulletV;
+    private final Vector2 bulletPos;
+    private final float bulletHeight;
+    private final int bulletDamage;
 
     private Rect worldBounds;
-    private Vector2 v;
+    private Vector2 v = new Vector2();
     private boolean pressedLeft;
     private boolean pressedRight;
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public MainShip(TextureAtlas atlas) {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
-        v = new Vector2();
+        this.bulletPool = bulletPool;
+        bulletRegion = atlas.findRegion("bulletMainShip");
+        bulletV = new Vector2(0, 0.5f);
+        bulletPos = new Vector2();
+        bulletHeight = 0.01f;
+        bulletDamage = 1;
     }
 
     @Override
@@ -92,8 +104,10 @@ public class MainShip extends BaseSprite {
                 pressedRight = true;
                 v.x = SHIP_SPEED;
                 break;
+            case Input.Keys.UP:
+                shoot();
+                break;
         }
-        System.out.printf("%s / %s%n", pressedLeft ? "Left" : "", pressedRight ? "Right" : "");
         return false;
     }
 
@@ -110,7 +124,12 @@ public class MainShip extends BaseSprite {
                 v.x = pressedLeft ? -SHIP_SPEED : 0f;
                 break;
         }
-        System.out.printf("%s  %s%n", pressedLeft ? "Left" : "", pressedRight ? "Right" : "");
         return false;
+    }
+
+    private void shoot() {
+        Bullet bullet = bulletPool.obtain();
+        bulletPos.set(pos.x, pos.y + getHalfHeight());
+        bullet.set(this, bulletRegion, bulletPos, bulletV, bulletHeight, worldBounds, bulletDamage);
     }
 }

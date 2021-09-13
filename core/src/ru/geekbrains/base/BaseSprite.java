@@ -14,6 +14,9 @@ public class BaseSprite extends Rect {
     protected TextureRegion[] regions;
     protected int frame;
 
+    public BaseSprite() {
+        regions = new TextureRegion[1];
+    }
     public BaseSprite(TextureRegion region) {
         regions = new TextureRegion[1];
         regions[0] = region;
