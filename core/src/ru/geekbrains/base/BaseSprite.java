@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.utils.Regions;
 
 public class BaseSprite extends Rect {
 
@@ -16,6 +17,10 @@ public class BaseSprite extends Rect {
     public BaseSprite(TextureRegion region) {
         regions = new TextureRegion[1];
         regions[0] = region;
+    }
+
+    public BaseSprite(TextureRegion region, int rows, int cols, int frames) {
+        this.regions = Regions.split(region, rows, cols, frames);
     }
 
     public void setHeightProportion(float height) {

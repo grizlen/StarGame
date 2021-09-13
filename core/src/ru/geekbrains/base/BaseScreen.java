@@ -104,7 +104,7 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
-        System.out.println("keyTyped character = " + character);
+//        System.out.println("keyTyped character = " + character);
         return false;
     }
 
