@@ -74,4 +74,8 @@ public class BaseSprite extends Rect {
                 angle
         );
     }
+
+    public void setRegions(TextureRegion[] regions) {
+        this.regions = regions;
+    }
 }

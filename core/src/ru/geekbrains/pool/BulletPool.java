@@ -9,7 +9,7 @@ public class BulletPool extends SpitePool<Bullet> {
 
     private Sound sound;
 
-    public void setSound(Sound sound) {
+    public BulletPool(Sound sound) {
         this.sound = sound;
     }
 
