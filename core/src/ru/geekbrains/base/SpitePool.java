@@ -35,7 +35,7 @@ public abstract class SpitePool<T extends PooledSprite> {
         }
     }
 
-    public void drawActiveSprites(SpriteBatch batch) {
+    public void drawActiveSprites(final SpriteBatch batch) {
         for (PooledSprite sprite : activeObjects) {
             if (!sprite.isDestroyed()) {
                 sprite.draw(batch);

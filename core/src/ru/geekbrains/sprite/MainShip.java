@@ -1,10 +1,13 @@
 package ru.geekbrains.sprite;
 
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.BaseShip;
+import ru.geekbrains.global.Config;
+import ru.geekbrains.info.BulletInfo;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 
@@ -21,17 +24,12 @@ public class MainShip extends BaseShip {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
-        super(atlas.findRegion("main_ship"), 1, 2, 2);
-        setUpBullets(
-                bulletPool,
-                atlas.findRegion("bulletMainShip"),
-                new Vector2(0, 0.5f),
-//                new Vector2(),
-                0.01f,
-                1
-        );
+    public MainShip(BulletPool bulletPool, Rect worldBounds) {
+        super(Config.getMainATLAS().findRegion("main_ship"), 1, 2, 2);
+        setBulletPool(bulletPool);
+        setWorldBounds(worldBounds);
         setShootInterval(SHOOT_INTERVAL);
+        setBulletInfo(BulletInfo.BULLET_MAIN_SHIP);
     }
 
     @Override

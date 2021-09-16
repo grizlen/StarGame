@@ -5,31 +5,20 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.geekbrains.global.Config;
+import ru.geekbrains.info.BulletInfo;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.EnemyPool;
 import ru.geekbrains.sprite.EnemyShip;
 
-public class EnemyEMitTer {
+public class EnemyEmitTer {
 
-    private static final float GENERATE_INTERVAL = 4f;
+    private static final float GENERATE_INTERVAL = 1f;
     private final EnemyPool enemyPool;
     private final Rect worldBounds;
     private final TextureRegion[] smallRegions, mediumRegions, bigRegions;
     private final TextureRegion bulletRegion;
 
-
-    private final Vector2
-            SMALL_BULLET_VEL = new Vector2(0, -0.5f),
-            MEDIUM_BULLET_VEL = new Vector2(0, -0.5f),
-            BIG_BULLET_VEL = new Vector2(0, -0.5f);
-    private static final float
-            SMALL_BULLET_HEIGHT = 0.01f,
-            MEDIUM_BULLET_HEIGHT = 0.02f,
-            BIG_BULLET_HEIGHT = 0.04f;
-    private static final int
-            SMALL_BULLET_DAMAGE = 1,
-            MEDIUM_BULLET_DAMAGE = 2,
-            BIG_BULLET_DAMAGE = 4;
 
     private static final float
             SMALL_ENEMY_HEIGHT = 0.1f,
@@ -42,14 +31,14 @@ public class EnemyEMitTer {
 
     private float generateTimer;
 
-    public EnemyEMitTer(TextureAtlas atlas, EnemyPool enemyPool, Rect worldBounds) {
+    public EnemyEmitTer(EnemyPool enemyPool, Rect worldBounds) {
         this.enemyPool = enemyPool;
         this.worldBounds = worldBounds;
 
-        smallRegions = Regions.split(atlas.findRegion("enemy0"), 1, 2, 2);
-        mediumRegions = Regions.split(atlas.findRegion("enemy0"), 1, 2, 2);
-        bigRegions = Regions.split(atlas.findRegion("enemy0"), 1, 2, 2);
-        bulletRegion = atlas.findRegion("bulletEnemy");
+        smallRegions = Regions.split(Config.getMainATLAS().findRegion("enemy0"), 1, 2, 2);
+        mediumRegions = Regions.split(Config.getMainATLAS().findRegion("enemy1"), 1, 2, 2);
+        bigRegions = Regions.split(Config.getMainATLAS().findRegion("enemy2"), 1, 2, 2);
+        bulletRegion = Config.getMainATLAS().findRegion("bulletEnemy");
 
     }
 
@@ -73,13 +62,7 @@ public class EnemyEMitTer {
     private void setSmallEnemy(EnemyShip ship) {
         ship.setRegions(smallRegions);
         ship.setHeightProportion(SMALL_ENEMY_HEIGHT);
-        ship.setUpBullets(
-                enemyPool.getBulletPool(),
-                bulletRegion,
-                SMALL_BULLET_VEL,
-                SMALL_BULLET_HEIGHT,
-                SMALL_BULLET_DAMAGE
-        );
+        ship.setBulletInfo(BulletInfo.BULLET_SMALL_ENEMY_SHIP);
 
         ship.pos.x = MathUtils.random(
                 worldBounds.getLeft() + ship.getHalfWidth(),
@@ -94,13 +77,8 @@ public class EnemyEMitTer {
     private void setMediumEnemy(EnemyShip ship) {
         ship.setRegions(mediumRegions);
         ship.setHeightProportion(MEDIUM_ENEMY_HEIGHT);
-        ship.setUpBullets(
-                enemyPool.getBulletPool(),
-                bulletRegion,
-                MEDIUM_BULLET_VEL,
-                MEDIUM_BULLET_HEIGHT,
-                MEDIUM_BULLET_DAMAGE
-        );
+        ship.setBulletInfo(BulletInfo.BULLET_MEDIUM_ENEMY_SHIP);
+        ship.setBulletInfo(BulletInfo.BULLET_MEDIUM_ENEMY_SHIP);
 
         ship.pos.x = MathUtils.random(
                 worldBounds.getLeft() + ship.getHalfWidth(),
@@ -115,13 +93,7 @@ public class EnemyEMitTer {
     private void setBigEnemy(EnemyShip ship) {
         ship.setRegions(bigRegions);
         ship.setHeightProportion(BIG_ENEMY_HEIGHT);
-        ship.setUpBullets(
-                enemyPool.getBulletPool(),
-                bulletRegion,
-                BIG_BULLET_VEL,
-                BIG_BULLET_HEIGHT,
-                BIG_BULLET_DAMAGE
-        );
+        ship.setBulletInfo(BulletInfo.BULLET_BIG_ENEMY_SHIP);
 
         ship.pos.x = MathUtils.random(
                 worldBounds.getLeft() + ship.getHalfWidth(),

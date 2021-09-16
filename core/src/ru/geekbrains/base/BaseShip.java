@@ -1,27 +1,27 @@
 package ru.geekbrains.base;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.geekbrains.info.BulletInfo;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.sprite.Bullet;
 
 public class BaseShip extends PooledSprite{
 
-    protected final Vector2 vel = new Vector2();
-
-    private float shootTime;
-    private float shootInterval;
-
     private BulletPool bulletPool;
-    private TextureRegion bulletRegion;
+    protected Rect worldBounds;
+
+    protected final Vector2 vel = new Vector2();
+    protected float shootTime;
+    protected float shootInterval;
+
     private Vector2 bulletVel = new Vector2();
     protected Vector2 bulletPos = new Vector2();
-    private float bulletHeight;
-    private int bulletDamage;
 
-    protected Rect worldBounds;
+    private BulletInfo bulletInfo;
 
     public BaseShip() {
     }
@@ -30,8 +30,16 @@ public class BaseShip extends PooledSprite{
         super(region, rows, cols, frames);
     }
 
-    public float getShootInterval() {
-        return shootInterval;
+    public void setBulletPool(BulletPool bulletPool) {
+        this.bulletPool = bulletPool;
+    }
+
+    public Rect getWorldBounds() {
+        return worldBounds;
+    }
+
+    public void setWorldBounds(Rect worldBounds) {
+        this.worldBounds = worldBounds;
     }
 
     public void setShootInterval(float shootInterval) {
@@ -58,17 +66,11 @@ public class BaseShip extends PooledSprite{
 
     private void shoot() {
         Bullet bullet = bulletPool.obtain();
-        bullet.set(this, bulletRegion, bulletPos, bulletVel, bulletHeight, worldBounds, bulletDamage);
+        bullet.set(this, bulletPos, worldBounds, bulletInfo);
     }
 
-    public void setUpBullets(BulletPool pool, TextureRegion region, Vector2 vel, float height, int damage) {
-//    public void setUpBullets(BulletPool pool, TextureRegion region, Vector2 vel, Vector2 pos, float height, int damade) {
-        bulletPool = pool;
-        bulletRegion = region;
-        bulletVel.set(vel);
-//        bulletPos.set(pos);
-        bulletHeight = height;
-        bulletDamage = damage;
+    public void setBulletInfo(BulletInfo bulletInfo) {
+        this.bulletInfo = bulletInfo;
     }
 
     public void move(float x, float y) {
