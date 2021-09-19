@@ -1,10 +1,10 @@
 package ru.geekbrains.base;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.info.BulletInfo;
+import ru.geekbrains.info.ShipInfo;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.sprite.Bullet;
@@ -22,28 +22,11 @@ public class BaseShip extends PooledSprite{
     protected Vector2 bulletPos = new Vector2();
 
     private BulletInfo bulletInfo;
+    private ShipInfo shipInfo;
 
-    public BaseShip() {
-    }
-
-    public BaseShip(TextureRegion region, int rows, int cols, int frames) {
-        super(region, rows, cols, frames);
-    }
-
-    public void setBulletPool(BulletPool bulletPool) {
+    public BaseShip(BulletPool bulletPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
-    }
-
-    public Rect getWorldBounds() {
-        return worldBounds;
-    }
-
-    public void setWorldBounds(Rect worldBounds) {
         this.worldBounds = worldBounds;
-    }
-
-    public void setShootInterval(float shootInterval) {
-        this.shootInterval = shootInterval;
     }
 
     @Override
@@ -86,4 +69,14 @@ public class BaseShip extends PooledSprite{
     }
 
 
+    public void setShipInfo(ShipInfo shipInfo) {
+        this.shipInfo = shipInfo;
+        regions = shipInfo.getRegions();
+        setHeightProportion(shipInfo.getHeight());
+        shootInterval = shipInfo.getShootInterval();
+    }
+
+    public ShipInfo getShipInfo() {
+        return shipInfo;
+    }
 }
