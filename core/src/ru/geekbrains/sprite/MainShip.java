@@ -1,43 +1,37 @@
 package ru.geekbrains.sprite;
 
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.BaseShip;
+import ru.geekbrains.global.Config;
+import ru.geekbrains.info.BulletInfo;
+import ru.geekbrains.info.ShipInfo;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 
 public class MainShip extends BaseShip {
 
     private static final float SHIP_SPEED = 0.5f;
-    private static final float HEIFGH = 0.15f;
     private static final float BOOTOM_MARGIN = 0.05f;
     private static final int INVALID_POINTER = -1;
-    private static final float SHOOT_INTERVAL = 0.1f;
 
     private boolean pressedLeft;
     private boolean pressedRight;
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
-        super(atlas.findRegion("main_ship"), 1, 2, 2);
-        setUpBullets(
-                bulletPool,
-                atlas.findRegion("bulletMainShip"),
-                new Vector2(0, 0.5f),
-//                new Vector2(),
-                0.01f,
-                1
-        );
-        setShootInterval(SHOOT_INTERVAL);
+    public MainShip(BulletPool bulletPool, Rect worldBounds) {
+        super(bulletPool, worldBounds);
+        setBulletInfo(BulletInfo.BULLET_MAIN_SHIP);
+        setShipInfo(ShipInfo.MAIN_SHIP);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-        setHeightProportion(HEIFGH);
         setBottom(worldBounds.getBottom() + BOOTOM_MARGIN);
     }
 

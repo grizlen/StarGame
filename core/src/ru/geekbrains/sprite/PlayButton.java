@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.geekbrains.base.BaseButton;
+import ru.geekbrains.global.Config;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.screen.GameScreen;
 
@@ -12,8 +13,8 @@ public class PlayButton extends BaseButton {
     private static final float PADDING = 0.03f;
     private final Game game;
 
-    public PlayButton(TextureAtlas atlas, Game game) {
-        super(atlas.findRegion("btPlay"));
+    public PlayButton(Game game) {
+        super(Config.getMenuATLAS().findRegion("btPlay"));
         this.game = game;
     }
 

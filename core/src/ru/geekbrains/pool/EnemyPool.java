@@ -1,6 +1,7 @@
 package ru.geekbrains.pool;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.geekbrains.base.SpitePool;
 import ru.geekbrains.math.Rect;
@@ -22,8 +23,7 @@ public class EnemyPool extends SpitePool<EnemyShip> {
 
     @Override
     protected EnemyShip newObject() {
-        EnemyShip ship = new EnemyShip(worldBounds);
-        return ship;
+        return new EnemyShip(bulletPool, worldBounds);
     }
 
     @Override

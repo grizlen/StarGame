@@ -5,14 +5,15 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.BaseSprite;
+import ru.geekbrains.global.Config;
 import ru.geekbrains.math.Rect;
 
 public class Star extends BaseSprite {
     private final Vector2 v;
     private Rect worldBounds;
 
-    public Star(TextureAtlas atlas) {
-        super(atlas.findRegion("star"));
+    public Star() {
+        super(Config.getMainATLAS().findRegion("star"));
         v = new Vector2(
                 MathUtils.random(-0.005f, 0.005f),
                 MathUtils.random(-0.2f, -0.05f));
