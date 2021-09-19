@@ -1,11 +1,7 @@
 package ru.geekbrains.utils;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.global.Config;
 import ru.geekbrains.info.BulletInfo;
 import ru.geekbrains.info.ShipInfo;
 import ru.geekbrains.math.Rect;
@@ -14,7 +10,7 @@ import ru.geekbrains.sprite.EnemyShip;
 
 public class EnemyEmitTer {
 
-    private static final float GENERATE_INTERVAL = 1f;
+    private static final float GENERATE_INTERVAL = 4f;
     private final EnemyPool enemyPool;
     private final Rect worldBounds;
 

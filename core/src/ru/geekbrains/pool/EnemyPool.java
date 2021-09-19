@@ -1,29 +1,26 @@
 package ru.geekbrains.pool;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import ru.geekbrains.base.SpitePool;
+import ru.geekbrains.base.SpritePool;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.sprite.EnemyShip;
 
-public class EnemyPool extends SpitePool<EnemyShip> {
+public class EnemyPool extends SpritePool<EnemyShip> {
 
     private final BulletPool bulletPool;
+    private final ExplosionPool explosionPool;
     private final Rect worldBounds;
 
-    public EnemyPool(BulletPool bulletPool, Rect worldBounds) {
+    public EnemyPool(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
-    }
-
-    public BulletPool getBulletPool() {
-        return bulletPool;
     }
 
     @Override
     protected EnemyShip newObject() {
-        return new EnemyShip(bulletPool, worldBounds);
+        return new EnemyShip(bulletPool, explosionPool, worldBounds);
     }
 
     @Override

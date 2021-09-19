@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SpitePool<T extends PooledSprite> {
+public abstract class SpritePool<T extends PooledSprite> {
 
     protected final List<T> activeObjects = new ArrayList<>();
     protected final List<T> freeObjects = new ArrayList<>();

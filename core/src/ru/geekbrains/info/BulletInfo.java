@@ -10,7 +10,7 @@ public enum BulletInfo {
             "bulletMainShip",
             new Vector2(0, 0.5f),
             0.01f,
-            1
+            4
     ),
     BULLET_SMALL_ENEMY_SHIP(
             "bulletEnemy",

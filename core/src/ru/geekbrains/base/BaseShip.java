@@ -1,32 +1,57 @@
 package ru.geekbrains.base;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.info.BulletInfo;
 import ru.geekbrains.info.ShipInfo;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
+import ru.geekbrains.pool.ExplosionPool;
 import ru.geekbrains.sprite.Bullet;
+import ru.geekbrains.sprite.Explosion;
 
 public class BaseShip extends PooledSprite{
 
+    private static final float DAMAGE_ANIMATE_INTERVAL = 0.1f;
     private BulletPool bulletPool;
+    private final ExplosionPool explosionPool;
     protected Rect worldBounds;
 
     protected final Vector2 vel = new Vector2();
     protected float shootTime;
     protected float shootInterval;
 
-    private Vector2 bulletVel = new Vector2();
     protected Vector2 bulletPos = new Vector2();
 
     private BulletInfo bulletInfo;
     private ShipInfo shipInfo;
+    private int hp;
+    private float damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
 
-    public BaseShip(BulletPool bulletPool, Rect worldBounds) {
+    public BaseShip(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
+    }
+
+    public void setBulletInfo(BulletInfo bulletInfo) {
+        this.bulletInfo = bulletInfo;
+    }
+
+    public ShipInfo getShipInfo() {
+        return shipInfo;
+    }
+
+    public void setShipInfo(ShipInfo shipInfo) {
+        this.shipInfo = shipInfo;
+        regions = shipInfo.getRegions();
+        setHeightProportion(shipInfo.getHeight());
+        shootInterval = shipInfo.getShootInterval();
+        hp = shipInfo.getHp();
+    }
+
+    public float getBulletDamage() {
+        return bulletInfo.getDamage();
     }
 
     @Override
@@ -45,15 +70,21 @@ public class BaseShip extends PooledSprite{
                 shootTime -= shootInterval;
             }
         }
+        damageAnimateTimer += delta;
+        if (damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL) {
+            frame = 0;
+        }
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
     }
 
     private void shoot() {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletPos, worldBounds, bulletInfo);
-    }
-
-    public void setBulletInfo(BulletInfo bulletInfo) {
-        this.bulletInfo = bulletInfo;
     }
 
     public void move(float x, float y) {
@@ -69,14 +100,22 @@ public class BaseShip extends PooledSprite{
     }
 
 
-    public void setShipInfo(ShipInfo shipInfo) {
-        this.shipInfo = shipInfo;
-        regions = shipInfo.getRegions();
-        setHeightProportion(shipInfo.getHeight());
-        shootInterval = shipInfo.getShootInterval();
+    private void boom() {
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(pos, getHeight());
     }
 
-    public ShipInfo getShipInfo() {
-        return shipInfo;
+    public void damage(float damage) {
+        hp -= damage;
+        if (hp <= 0) {
+            hp = 0;
+            destroy();
+        }
+        frame = 1;
+        damageAnimateTimer = 0f;
+    }
+
+    public int getHp() {
+        return hp;
     }
 }

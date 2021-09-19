@@ -2,15 +2,14 @@ package ru.geekbrains.sprite;
 
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.BaseShip;
-import ru.geekbrains.global.Config;
 import ru.geekbrains.info.BulletInfo;
 import ru.geekbrains.info.ShipInfo;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
+import ru.geekbrains.pool.ExplosionPool;
 
 public class MainShip extends BaseShip {
 
@@ -23,8 +22,8 @@ public class MainShip extends BaseShip {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public MainShip(BulletPool bulletPool, Rect worldBounds) {
-        super(bulletPool, worldBounds);
+    public MainShip(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds) {
+        super(bulletPool, explosionPool, worldBounds);
         setBulletInfo(BulletInfo.BULLET_MAIN_SHIP);
         setShipInfo(ShipInfo.MAIN_SHIP);
     }
@@ -44,6 +43,12 @@ public class MainShip extends BaseShip {
         }
     }
 
+
+    @Override
+    public void damage(float damage) {
+        super.damage(damage);
+        System.out.println("Main HP = " + getHp());
+    }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
@@ -123,4 +128,12 @@ public class MainShip extends BaseShip {
         return false;
     }
 
+    public boolean isCollision(Rect rect) {
+        return !(
+                rect.getRight() < getLeft()
+                        || rect.getLeft() > getRight()
+                        || rect.getBottom() > pos.y
+                        || rect.getTop() < getBottom()
+        );
+    }
 }

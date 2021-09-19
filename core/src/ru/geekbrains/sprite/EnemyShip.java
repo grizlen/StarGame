@@ -6,14 +6,15 @@ import ru.geekbrains.base.BaseShip;
 import ru.geekbrains.info.ShipInfo;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
+import ru.geekbrains.pool.ExplosionPool;
 
 public class EnemyShip extends BaseShip {
 
     private boolean isInit;
     private  final Vector2 initVel = new Vector2();
 
-    public EnemyShip(BulletPool bulletPool, Rect worldBounds) {
-        super(bulletPool, worldBounds);
+    public EnemyShip(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds) {
+        super(bulletPool, explosionPool, worldBounds);
     }
 
     @Override
@@ -30,11 +31,29 @@ public class EnemyShip extends BaseShip {
         }
         super.update(delta);
         bulletPos.set(pos.x, pos.y - getHalfHeight());
+        if (getBottom() < worldBounds.getBottom()) {
+            destroy();
+        }
     }
 
     @Override
     public void setShipInfo(ShipInfo shipInfo) {
         super.setShipInfo(shipInfo);
         initVel.set(shipInfo.getVel()).scl(3f);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        shootInterval = 0;
+    }
+
+    public boolean isCollision(Rect rect) {
+        return !(
+                rect.getRight() < getLeft()
+                        || rect.getLeft() > getRight()
+                        || rect.getBottom() > getTop()
+                        || rect.getTop() < pos.y
+        );
     }
 }

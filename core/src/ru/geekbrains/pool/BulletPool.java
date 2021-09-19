@@ -2,10 +2,10 @@ package ru.geekbrains.pool;
 
 import com.badlogic.gdx.audio.Sound;
 
-import ru.geekbrains.base.SpitePool;
+import ru.geekbrains.base.SpritePool;
 import ru.geekbrains.sprite.Bullet;
 
-public class BulletPool extends SpitePool<Bullet> {
+public class BulletPool extends SpritePool<Bullet> {
 
     private Sound sound;
 
