@@ -8,7 +8,9 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.List;
 
 import ru.geekbrains.base.BaseScreen;
+import ru.geekbrains.base.BaseSprite;
 import ru.geekbrains.global.Config;
+import ru.geekbrains.info.ShipInfo;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.EnemyPool;
@@ -16,7 +18,9 @@ import ru.geekbrains.pool.ExplosionPool;
 import ru.geekbrains.sprite.Background;
 import ru.geekbrains.sprite.Bullet;
 import ru.geekbrains.sprite.EnemyShip;
+import ru.geekbrains.sprite.GameOverText;
 import ru.geekbrains.sprite.MainShip;
+import ru.geekbrains.sprite.RestartButton;
 import ru.geekbrains.sprite.Star;
 import ru.geekbrains.utils.EnemyEmitTer;
 
@@ -32,6 +36,8 @@ public class GameScreen extends BaseScreen {
     private EnemyEmitTer enemyEmitTer;
     private EnemyPool enemyPool;
     private ExplosionPool explosionPool;
+    private RestartButton restartButton;
+    private GameOverText gameOverText;
 
     @Override
     public void show() {
@@ -56,6 +62,9 @@ public class GameScreen extends BaseScreen {
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
         bgMusic.setLooping(true);
         bgMusic.play();
+
+        restartButton = new RestartButton(false, this);
+        gameOverText = new GameOverText(false);
     }
 
     @Override
@@ -75,6 +84,8 @@ public class GameScreen extends BaseScreen {
             star.resize(worldBounds);
         }
         mainShip.resize(worldBounds);
+        restartButton.resize(worldBounds);
+        gameOverText.resize(worldBounds);
     }
 
     @Override
@@ -91,23 +102,37 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        return mainShip.touchDown(touch, pointer, button);
+        if (mainShip.isDestroyed()) {
+            restartButton.touchDown(touch, pointer, button);
+        } else {
+            mainShip.touchDown(touch, pointer, button);
+        }
+        return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        return mainShip.touchUp(touch, pointer, button);
+        if (mainShip.isDestroyed()) {
+            restartButton.touchUp(touch, pointer, button);
+        } else {
+            mainShip.touchUp(touch, pointer, button);
+        }
+        return false;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        mainShip.keyDown(keycode);
+        if (!mainShip.isDestroyed()) {
+            mainShip.keyDown(keycode);
+        }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        mainShip.keyUp(keycode);
+        if (!mainShip.isDestroyed()) {
+            mainShip.keyUp(keycode);
+        }
         return false;
     }
 
@@ -121,6 +146,9 @@ public class GameScreen extends BaseScreen {
             mainBulletPool.updateActiveSprites(delta);
             enemyPool.updateActiveSprites(delta);
             enemyEmitTer.generate(delta);
+        } else {
+            restartButton.setVisible(true);
+            gameOverText.setVisible(true);
         }
     }
 
@@ -158,6 +186,7 @@ public class GameScreen extends BaseScreen {
         mainBulletPool.freeAllDetroyedActiveSprites();
         explosionPool.freeAllDetroyedActiveSprites();
         enemyPool.freeAllDetroyedActiveSprites();
+        enemyBulletPool.freeAllDetroyedActiveSprites();
     }
 
     private void draw() {
@@ -172,6 +201,22 @@ public class GameScreen extends BaseScreen {
             enemyPool.drawActiveSprites(batch);
         }
         explosionPool.drawActiveSprites(batch);
+        if (restartButton.isVisible()) {
+            restartButton.draw(batch);
+        }
+        if (gameOverText.isVisible()) {
+            gameOverText.draw(batch);
+        }
         batch.end();
+    }
+
+    public void start() {
+        gameOverText.setVisible(false);
+        enemyPool.freeAll();
+        enemyBulletPool.freeAll();
+        mainBulletPool.freeAll();
+        mainShip.setShipInfo(ShipInfo.MAIN_SHIP);
+        mainShip.pos.x = 0;
+        mainShip.flushDestroy();
     }
 }

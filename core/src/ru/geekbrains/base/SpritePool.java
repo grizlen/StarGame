@@ -60,6 +60,11 @@ public abstract class SpritePool<T extends PooledSprite> {
         }
     }
 
+    public void freeAll () {
+        while (activeObjects.size() > 0) {
+            freeObjects.add(activeObjects.remove(0));
+        }
+    }
     public void dispose() {
         activeObjects.clear();
         freeObjects.clear();
