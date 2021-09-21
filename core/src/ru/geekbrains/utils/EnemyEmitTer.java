@@ -21,41 +21,29 @@ public class EnemyEmitTer {
         this.worldBounds = worldBounds;
     }
 
-    public void generate(float delta) {
+    public void generate(float delta, int level) {
         generateTimer += delta;
         if (generateTimer < GENERATE_INTERVAL) {
             return;
         }
         generateTimer = 0;
         EnemyShip ship = enemyPool.obtain();
+        ship.setLevel(level);
         float type = (float) Math.random();
         if (type < 0.5) {
-            setSmallEnemy(ship);
+            ship.setShipInfo(ShipInfo.SMALL_ENEMY_SHIP);
+            ship.setBulletInfo(BulletInfo.BULLET_SMALL_ENEMY_SHIP);
         } else if (type < 0.8) {
-            setMediumEnemy(ship);
+            ship.setShipInfo(ShipInfo.MEDIUM_ENEMY_SHIP);
+            ship.setBulletInfo(BulletInfo.BULLET_MEDIUM_ENEMY_SHIP);
         } else {
-            setBigEnemy(ship);
+            ship.setShipInfo(ShipInfo.BIG_ENEMY_SHIP);
+            ship.setBulletInfo(BulletInfo.BULLET_BIG_ENEMY_SHIP);
         }
         ship.pos.x = MathUtils.random(
                 worldBounds.getLeft() + ship.getHalfWidth(),
                 worldBounds.getRight() - ship.getHalfWidth()
         );
         ship.setBottom(worldBounds.getTop());
-    }
-
-    private void setSmallEnemy(EnemyShip ship) {
-        ship.setShipInfo(ShipInfo.SMALL_ENEMY_SHIP);
-        ship.setBulletInfo(BulletInfo.BULLET_SMALL_ENEMY_SHIP);
-
-    }
-
-    private void setMediumEnemy(EnemyShip ship) {
-        ship.setShipInfo(ShipInfo.MEDIUM_ENEMY_SHIP);
-        ship.setBulletInfo(BulletInfo.BULLET_MEDIUM_ENEMY_SHIP);
-    }
-
-    private void setBigEnemy(EnemyShip ship) {
-        ship.setShipInfo(ShipInfo.BIG_ENEMY_SHIP);
-        ship.setBulletInfo(BulletInfo.BULLET_BIG_ENEMY_SHIP);
     }
 }

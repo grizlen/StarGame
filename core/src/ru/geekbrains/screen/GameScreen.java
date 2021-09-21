@@ -4,13 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.List;
 
 import ru.geekbrains.base.BaseScreen;
-import ru.geekbrains.base.BaseSprite;
+import ru.geekbrains.base.Font;
 import ru.geekbrains.global.Config;
-import ru.geekbrains.info.ShipInfo;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.EnemyPool;
@@ -26,6 +26,12 @@ import ru.geekbrains.utils.EnemyEmitTer;
 
 public class GameScreen extends BaseScreen {
     private static final int STAR_COUNT = 64;
+
+    private static final String FRAGS = "Frags: ";
+    private static final String HP = "HP: ";
+    private static final String LEVEL = "Level: ";
+    private static final float MARGIN = 0.01f;
+
     private Texture bg;
     private Background background;
     private Star[] stars;
@@ -33,11 +39,17 @@ public class GameScreen extends BaseScreen {
     private BulletPool mainBulletPool;
     private BulletPool enemyBulletPool;
     private Music bgMusic;
-    private EnemyEmitTer enemyEmitTer;
+    private EnemyEmitTer enemyEmitter;
     private EnemyPool enemyPool;
     private ExplosionPool explosionPool;
     private RestartButton restartButton;
     private GameOverText gameOverText;
+    private Font font;
+    private StringBuilder sbFrags;
+    private StringBuilder sbHP;
+    private StringBuilder sbLevel;
+    private int frags;
+    private int level = 1;
 
     @Override
     public void show() {
@@ -57,14 +69,20 @@ public class GameScreen extends BaseScreen {
 
         mainShip = new MainShip(mainBulletPool, explosionPool, worldBounds);
 
-        enemyEmitTer = new EnemyEmitTer(enemyPool, worldBounds);
+        enemyEmitter = new EnemyEmitTer(enemyPool, worldBounds);
+
+        restartButton = new RestartButton(false, this);
+        gameOverText = new GameOverText(false);
+
+        font = new Font("font/font.fnt", "font/font.png");
+        font.setSize(0.02f);
+        sbFrags = new StringBuilder();
+        sbHP = new StringBuilder();
+        sbLevel = new StringBuilder();
 
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
         bgMusic.setLooping(true);
         bgMusic.play();
-
-        restartButton = new RestartButton(false, this);
-        gameOverText = new GameOverText(false);
     }
 
     @Override
@@ -145,7 +163,7 @@ public class GameScreen extends BaseScreen {
             mainShip.update(delta);
             mainBulletPool.updateActiveSprites(delta);
             enemyPool.updateActiveSprites(delta);
-            enemyEmitTer.generate(delta);
+            enemyEmitter.generate(delta, level);
         } else {
             restartButton.setVisible(true);
             gameOverText.setVisible(true);
@@ -170,13 +188,18 @@ public class GameScreen extends BaseScreen {
                 if (enemyShip.isCollision(bullet)) {
                     enemyShip.damage(bullet.getDamage());
                     bullet.destroy();
+                    if (enemyShip.isDestroyed()) {
+                        frags++;
+                        level = frags / 10 + 1;
+                        mainShip.setLevel(level);
+                    }
                 }
             }
         }
         bulletList = enemyBulletPool.getActiveObjects();
         for (Bullet bullet : bulletList) {
             if (mainShip.isCollision(bullet)) {
-                mainShip.damage(bullet.getDamage());
+                mainShip.damage(bullet.getDamage() * ((EnemyShip) bullet.getOwner()).getLevel());
                 bullet.destroy();
             }
         }
@@ -207,6 +230,7 @@ public class GameScreen extends BaseScreen {
         if (gameOverText.isVisible()) {
             gameOverText.draw(batch);
         }
+        printInfo();
         batch.end();
     }
 
@@ -217,4 +241,14 @@ public class GameScreen extends BaseScreen {
         mainBulletPool.freeAll();
         mainShip.reset();
     }
+
+    private void printInfo() {
+        sbFrags.setLength(0);
+        font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft() + MARGIN, worldBounds.getTop() - MARGIN);
+        sbHP.setLength(0);
+        font.draw(batch, sbHP.append(HP).append(mainShip.getHp()), worldBounds.pos.x, worldBounds.getTop() - MARGIN, Align.center);
+        sbLevel.setLength(0);
+        font.draw(batch, sbLevel.append(LEVEL).append(level), worldBounds.getRight() - MARGIN, worldBounds.getTop() - MARGIN, Align.right);
+    }
+
 }

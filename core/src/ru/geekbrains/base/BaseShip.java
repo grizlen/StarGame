@@ -27,6 +27,7 @@ public class BaseShip extends PooledSprite{
     private ShipInfo shipInfo;
     private int hp;
     private float damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
+    private int level;
 
     public BaseShip(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
@@ -52,6 +53,22 @@ public class BaseShip extends PooledSprite{
 
     public float getBulletDamage() {
         return bulletInfo.getDamage();
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     @Override
@@ -113,9 +130,5 @@ public class BaseShip extends PooledSprite{
         }
         frame = 1;
         damageAnimateTimer = 0f;
-    }
-
-    public int getHp() {
-        return hp;
     }
 }

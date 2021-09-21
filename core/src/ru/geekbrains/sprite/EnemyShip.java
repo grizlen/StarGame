@@ -56,4 +56,5 @@ public class EnemyShip extends BaseShip {
                         || rect.getTop() < pos.y
         );
     }
+
 }

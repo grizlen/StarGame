@@ -144,4 +144,12 @@ public class MainShip extends BaseShip {
         leftPointer = rightPointer = INVALID_POINTER;
         flushDestroy();
     }
+
+    @Override
+    public void setLevel(int level) {
+        if (getLevel() != level) {
+            setHp(getShipInfo().getHp());
+            super.setLevel(level);
+        }
+    }
 }
