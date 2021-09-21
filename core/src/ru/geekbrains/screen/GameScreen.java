@@ -215,8 +215,6 @@ public class GameScreen extends BaseScreen {
         enemyPool.freeAll();
         enemyBulletPool.freeAll();
         mainBulletPool.freeAll();
-        mainShip.setShipInfo(ShipInfo.MAIN_SHIP);
-        mainShip.pos.x = 0;
-        mainShip.flushDestroy();
+        mainShip.reset();
     }
 }

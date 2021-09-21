@@ -136,4 +136,12 @@ public class MainShip extends BaseShip {
                         || rect.getTop() < getBottom()
         );
     }
+
+    public void reset() {
+        setShipInfo(ShipInfo.MAIN_SHIP);
+        pos.x = 0;
+        pressedLeft = pressedRight = false;
+        leftPointer = rightPointer = INVALID_POINTER;
+        flushDestroy();
+    }
 }
